@@ -1,0 +1,68 @@
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+       @keyframes realBlink {
+    0%   { opacity: 1; }
+    25%  { opacity: 0.5; }
+    50%  { opacity: 0; }
+    75%  { opacity: 0.5; }
+    100% { opacity: 1; }
+        }
+
+      .main-container {
+            text-align: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+
+            background-image: url("/static/homepage.png");
+            background-size: cover;
+            background-position: top;
+            background-repeat: repeat;
+        }
+
+        .greetings-container {
+            display: inline-block;
+            
+            padding: 40px;
+        }
+
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: #cbd8e6;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .g2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #cbd8e6;
+            letter-spacing: 1.5px;
+
+            margin-bottom: 110px;
+        }
+        .start {
+            padding: 15px 30px;
+            font-size: 25px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0);
+            border: white solid 1px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            animation: realBlink 3.5s infinite;
+        }
+        .start:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            animation: none;
+        }
+        .author {
+            font-weight: 700;
+            font-size: 22px;
+        }

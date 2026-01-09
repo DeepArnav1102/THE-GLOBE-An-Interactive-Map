@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Map</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+     <link  rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index-styles.css') }}">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="search-container">
+    <input 
+        class="search-input"
+        type="text" 
+        id="citySearchInput" 
+        placeholder="Search for a city..." 
+    />
+    <button class="srch-btn" onclick="searchCity()">🔍</button>
+    <button class="clrscrh-btn" onclick="clearSearch()">❌</button>
+</div>
+<div class="centre-btn">
+    <button class="btn-c" onclick="centreMap()">⊕</button>
+    <button class="btn-c" onclick="tooglecustomMarker()">📌</button>
+    <button class="btn-c" onclick="clearCustomMarkers()">🚫</button>
+    <button class="btn-d" id="distanceBtn" onclick="toggleDistanceMode(this)">📏</button>
+</div class>
+    <button class="btn" onclick="toggle(cityLayer, this)">
+        🏙 Metro Cities
+    </button>
+    <button class="btn" onclick="toggle(stateLayer, this)">
+        🗺 Indian States
+    </button>
+    <button class="btn" onclick="toggle(railLayer, this)">
+        🚆 Railways
+    </button>
+    <button class="btn" onclick="toggle(highwayLayer, this)">
+        🛣 Highways
+    </button>
+    <button class="btn" onclick="toggle(plantLayer, this)">
+        ⚡ Power Plants
+    </button>
+    <button class="btn" onclick="toggle(airportLayer, this)">
+        ✈ International Airports
+    </button>
+    <button class="btn" onclick="togglePopulationDensity(this)">
+        🗺️ Population
+    </button>
+</div>
+
+<div class="Topbar">
+    THE GLOBE
+</div>
+
+<div class="map-wrapper">
+    <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

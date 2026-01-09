@@ -1,0 +1,37 @@
+[
+  {
+    "name": "New Delhi",
+    "lat": 28.6139,
+    "lon": 77.2088,
+    "tagline": "Political Capital of India",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/9/99/India_Gate_on_the_evening.jpg"
+  },
+  {
+    "name": "Mumbai",
+    "lat": 18.9582,
+    "lon": 72.8321,
+    "tagline": "Financial Capital of India",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Marine_Drive_Skyline.jpg"
+  },
+  {
+    "name": "Chennai",
+    "lat": 13.0843,
+    "lon": 80.2705,
+    "tagline": "Cultural Capital of India",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/32/Chennai_Central.jpg"
+  },
+  {
+    "name": "Kolkata",
+    "lat": 22.5744,
+    "lon": 88.3629,
+    "tagline": "City of Joy",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Howrah_bridge_at_night.jpg"
+  },
+  {
+    "name": "Bengaluru",
+    "lat": 12.9629,
+    "lon": 77.5775,
+    "tagline": "IT Capital of India",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/cd/View_from_Visvesvaraya_Industrial_and_Technological_Museum.jpg"
+  }
+]
