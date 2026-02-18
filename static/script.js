@@ -481,6 +481,8 @@ function clearCustomMarkers() {
 
 }
 
+// ================= CITY INFO FETCH ================= */
+
 function getCityInfo() {
     const city = document.getElementById("City-info").value.trim();
 
@@ -530,8 +532,11 @@ function displayCityInfo(city, data) {
         ${data.best_time_to_visit}
     `;
 
-    L.popup()
-        .setLatLng(map.getCenter())  // Shows popup at map center
-        .setContent(content)
-        .openOn(map);
+    document.getElementById("cityInfoBox").innerHTML = content;
 }
+
+function clearCityInfo() {
+    document.getElementById("City-info").value = "";
+    document.getElementById("cityInfoBox").innerHTML = "";
+}
+

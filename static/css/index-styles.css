@@ -11,7 +11,7 @@
 
         .search-input {
             width: 50%;
-            height: 30px;
+            height: 25px;
             padding: 5px 10px;
             margin-top: 5px;
             border: 1px solid;
@@ -21,8 +21,8 @@
             background-color:rgba(255, 255, 255, 0.2);
             color: white;
         }
-        .srch-btn{
-            height: 41px;
+        .srch-btn {
+            height: 36px;
             width: 41px;
             margin-top: 5px;
             border: 1px solid;
@@ -33,8 +33,9 @@
             color: white;
             cursor: pointer;
         }
-        .clrscrh-btn{
-            height: 41px;
+
+        .clrscrh-btn, .clrinfo-btn {
+            height: 36px;
             width: 41px;
             margin-top: 5px;
             border: 1px solid;
@@ -42,6 +43,33 @@
             border-radius: 4px;
             font-size: 14px;
             background-color:rgb(219, 32, 32);
+            color: white;
+            cursor: pointer;
+        }
+
+          .city-info {
+            width: 50%;
+            height: 25px;
+            padding: 5px 10px;
+            margin-top: 5px;
+            border: 1px solid;
+            border-color: rgb(255, 255, 255);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color:rgba(255, 255, 255,)
+            
+        }
+
+        
+        .info-btn {
+            height: 36px;
+            width: 41px;
+            margin-top: 5px;
+            border: 1px solid;
+            border-color: rgb(255, 255, 255);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color:rgba(255, 255, 255, 0.2);
             color: white;
             cursor: pointer;
         }
@@ -57,6 +85,7 @@
             padding: 20px;
             z-index: 1000;
             background-color: #081f3c;
+            overflow-y: auto;
         }
 
         .sidebar h2 {
