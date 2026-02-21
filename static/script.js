@@ -1,10 +1,8 @@
+/* ================= INITIALIZE MAP ================= */
 var map = L.map("map").setView([20.5937, 78.9629], 5);
 
-/* ================= BASE MAPS ================= */
+/* ================= BASE MAP TYPES ================= */
 var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
-var topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png");
-
-
 osm.addTo(map);
 
 /* ================= LAYERS ================= */
@@ -17,12 +15,12 @@ var airportLayer = L.layerGroup();
 var populationLayerGroup = L.layerGroup();
 
 /* ================= METRO CITIES ================= */
-var citiesData = []; // Store cities for search
+var citiesData = [];
 
-fetch("/api/cities")
+fetch("/api/cities") //API endpoint to fetch city data
     .then(res => res.json())
     .then(data => {
-        citiesData = data; // Store for search
+        citiesData = data;
         data.forEach(c => {
             L.circle([c.lat, c.lon], {
                 radius: 50000,
@@ -41,7 +39,7 @@ fetch("/api/cities")
         });
     });
 
-/* ================= GEOJSON SAFE LOADER ================= */
+/* ================= GEOJSON LOADER ================= */
 function loadGeoJSON(url, style, targetLayer) {
     fetch(url)
         .then(res => {
@@ -54,18 +52,17 @@ function loadGeoJSON(url, style, targetLayer) {
         .catch(err => console.error(err));
 }
 
+/* ================= INDIAN STATES, RAILWAYS, HIGHWAYS ================= */
 loadGeoJSON(
     "/static/geojson/states_india.geojson",
     { color: "black", weight: 1, fillOpacity: 0.1 },
     stateLayer
 );
-
 loadGeoJSON(
     "/static/geojson/india_line.geojson",
     { color: "blue", weight: 1 },
     railLayer
 );
-
 loadGeoJSON(
     "/static/geojson/INDIA_NATIONAL_HIGHWAY.geojson",
     { color: "yellow", weight: 1 },
@@ -73,7 +70,7 @@ loadGeoJSON(
 );
 
 /* ================= POWER PLANTS ================= */
-fetch("/api/power-plants")
+fetch("/api/power-plants") //API endpoint to fetch power plant data
     .then(res => res.json())
     .then(data => {
         data.forEach(p => {
@@ -88,7 +85,7 @@ fetch("/api/power-plants")
     });
 
 /* ================= AIRPORTS ================= */
-fetch("/api/airports")
+fetch("/api/airports") //API endpoint to fetch airport data
     .then(res => res.json())
     .then(data => {
         data.forEach(a => {
@@ -98,11 +95,10 @@ fetch("/api/airports")
         });
     });
 
-/* ================= CONTROLS ================= */
+/* ================= LAYER CONTROLS ================= */
 L.control.layers(
     {
         "OpenStreetMap": osm,
-        "Topographic": topo,
     },
     {
         "Metro Cities": cityLayer,
@@ -125,14 +121,14 @@ function toggle(layer, button) {
     }
 }
 
+/* ================= DISTANCE MEASUREMENT VARIABLES ================= */
 var distanceMode = false;
 var distancePoints = [];
 var distanceLine = null;
 var distanceMarkers = [];
 
 function toggleDistanceMode(btn) {
-
-    // RESET MODE
+// Reset if already in distance mode
     if (distanceMode) {
         distanceMode = false;
         distancePoints = [];
@@ -150,7 +146,7 @@ function toggleDistanceMode(btn) {
         return;
     }
 
-    // START MODE
+    // Activate distance mode
     distanceMode = true;
     distancePoints = [];
     btn.innerHTML = "❌";
@@ -176,7 +172,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 map.on("click", function (e) {
-    if (!distanceMode && !customMarkerMode) return;
+    if (!distanceMode && !customMarkerMode) return; // handle only if in distance or custom marker mode
 
     const lat = e.latlng.lat;
     const lon = e.latlng.lng;
@@ -272,10 +268,8 @@ function getColor(pop) {
 }
 var populationLoaded = false;
 
-// Manual name mapping for common mismatches
+// Manual name mapping for mismatched state names between population and boundary datasets
 const stateNameMapping = {
-    // Add mappings if boundary file uses different names
-    // Format: "name_in_boundary_file": "name_in_population_file"
     "andaman & nicobar": "andaman and nicobar islands",
     "andaman and nicobar": "andaman and nicobar islands",
     "dadra & nagar haveli": "dadra and nagar haveli and daman and diu",
@@ -305,12 +299,10 @@ function normalizeStateName(name) {
 // Store population data
 const populationData = {};
 
-/* Step 1: Load population data */
-fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
+fetch("/static/geojson/india_states_ut_population_leaflet.geojson") // API endpoint to fetch population data in GeoJSON format
     .then(res => res.json())
     .then(popData => {
 
-        // Store population by normalized name
         popData.features.forEach(f => {
             const stateName = f.properties.name;
             const normalizedName = normalizeStateName(stateName);
@@ -320,13 +312,11 @@ fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
             };
         });
 
-
-        /* Step 2: Load actual state boundaries and apply population colors */
-        fetch("/static/geojson/states_india.geojson")
+        fetch("/static/geojson/states_india.geojson") // API endpoint to fetch state boundaries in GeoJSON format
             .then(res => res.json())
             .then(stateData => {
 
-                // First pass: log all state names from boundary file
+                // Log state names from boundary data for debugging
                 stateData.features.forEach(f => {
                     const props = f.properties;
                     const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
@@ -334,11 +324,10 @@ fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
 
                 const populationLayer = L.geoJSON(stateData, {
                     style: function (feature) {
-
+    
                         const props = feature.properties;
                         const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
                         const normalizedName = normalizeStateName(stateName);
-
                         const popInfo = populationData[normalizedName];
                         const pop = popInfo ? popInfo.population : 0;
 
@@ -356,7 +345,7 @@ fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
                         const props = feature.properties;
                         const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
                         const normalizedName = normalizeStateName(stateName);
-
+            
                         const popInfo = populationData[normalizedName];
                         const pop = popInfo ? popInfo.population : 0;
                         const displayName = popInfo ? popInfo.originalName : (stateName || 'Unknown');
@@ -385,6 +374,7 @@ fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
 
             })
     })
+
 
 /* ================= CITY SEARCH FEATURE ================= */
 var searchMarker = null;
@@ -497,7 +487,7 @@ function getCityInfo() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ city_name: city })
-    })
+    })                                                   //API endpoint to fetch city info
     .then(response => response.json())
     .then(data => {
 
