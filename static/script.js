@@ -20,38 +20,38 @@ var populationLayerGroup = L.layerGroup();
 var citiesData = []; // Store cities for search
 
 fetch("/api/cities")
-.then(res => res.json())
-.then(data => {
-    citiesData = data; // Store for search
-    data.forEach(c => {
-        L.circle([c.lat, c.lon], {
-            radius: 50000,
-            color: "red",
-            fillColor: "blue",
-            fillOpacity: 0.4
-        }).addTo(cityLayer);
+    .then(res => res.json())
+    .then(data => {
+        citiesData = data; // Store for search
+        data.forEach(c => {
+            L.circle([c.lat, c.lon], {
+                radius: 50000,
+                color: "red",
+                fillColor: "blue",
+                fillOpacity: 0.4
+            }).addTo(cityLayer);
 
-        L.marker([c.lat, c.lon])
-        .bindPopup(`
+            L.marker([c.lat, c.lon])
+                .bindPopup(`
             <h3>${c.name}</h3>
             ${c.tagline}<br>
             <img src="${c.image}" width="250">
         `)
-        .addTo(cityLayer);
+                .addTo(cityLayer);
+        });
     });
-});
 
 /* ================= GEOJSON SAFE LOADER ================= */
 function loadGeoJSON(url, style, targetLayer) {
     fetch(url)
-    .then(res => {
-        if (!res.ok) throw new Error("Failed to load " + url);
-        return res.json();
-    })
-    .then(data => {
-        L.geoJSON(data, { style: style }).addTo(targetLayer);
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to load " + url);
+            return res.json();
+        })
+        .then(data => {
+            L.geoJSON(data, { style: style }).addTo(targetLayer);
+        })
+        .catch(err => console.error(err));
 }
 
 loadGeoJSON(
@@ -74,29 +74,29 @@ loadGeoJSON(
 
 /* ================= POWER PLANTS ================= */
 fetch("/api/power-plants")
-.then(res => res.json())
-.then(data => {
-    data.forEach(p => {
-        L.circle([p.lati, p.lng], {
-            radius: p.capacity * 50,
-            color: "red",
-            fillOpacity: 0.25
-        })
-        .bindPopup(`Area: ${p.area}<br>Fuel: ${p.fuel}`)
-        .addTo(plantLayer);
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(p => {
+            L.circle([p.lati, p.lng], {
+                radius: p.capacity * 50,
+                color: "red",
+                fillOpacity: 0.25
+            })
+                .bindPopup(`Area: ${p.area}<br>Fuel: ${p.fuel}`)
+                .addTo(plantLayer);
+        });
     });
-});
 
 /* ================= AIRPORTS ================= */
 fetch("/api/airports")
-.then(res => res.json())
-.then(data => {
-    data.forEach(a => {
-        L.marker([a.latitude, a.longitude])
-        .bindPopup(`<b>${a.airport_name}</b><br>${a.city}`)
-        .addTo(airportLayer);
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(a => {
+            L.marker([a.latitude, a.longitude])
+                .bindPopup(`<b>${a.airport_name}</b><br>${a.city}`)
+                .addTo(airportLayer);
+        });
     });
-});
 
 /* ================= CONTROLS ================= */
 L.control.layers(
@@ -145,7 +145,7 @@ function toggleDistanceMode(btn) {
         distanceMarkers.forEach(m => map.removeLayer(m));
         distanceMarkers = [];
 
-        btn.innerHTML = "📏 Measure Distance";
+        btn.innerHTML = "📏";
         btn.classList.remove("active");
         return;
     }
@@ -153,7 +153,7 @@ function toggleDistanceMode(btn) {
     // START MODE
     distanceMode = true;
     distancePoints = [];
-    btn.innerHTML = "❌ Reset Distance";
+    btn.innerHTML = "❌";
     btn.classList.add("active");
 
     alert("Click two points on the map");
@@ -219,7 +219,7 @@ map.on("click", function (e) {
             `)
             .addTo(map)
             .openPopup();
-        
+
         customMarkers.push(marker); // Track this marker
         return;
     }
@@ -227,7 +227,7 @@ map.on("click", function (e) {
 
 /* ================= LAT-LNG ON CLICK ================= */
 map.on("click", function (e) {
-    if(!distanceMode && !customMarkerMode){
+    if (!distanceMode && !customMarkerMode) {
         const lat = e.latlng.lat.toFixed(6);
         const lng = e.latlng.lng.toFixed(6);
 
@@ -248,7 +248,7 @@ function togglePopulationDensity(btn) {
         alert("Population data is still loading. Please wait a moment and try again.");
         return;
     }
-    
+
     if (map.hasLayer(populationLayerGroup)) {
         map.removeLayer(populationLayerGroup);
         btn.classList.remove("active");
@@ -261,14 +261,14 @@ function togglePopulationDensity(btn) {
 /* ================= POPULATION CHOROPLETH WITH NAME MAPPING ================= */
 // Color scale
 function getColor(pop) {
-    return pop > 200000000 ? '#800026' :
-           pop > 150000000 ? '#BD0026' :
-           pop > 100000000 ? '#E31A1C' :
-           pop > 50000000  ? '#FC4E2A' :
-           pop > 20000000  ? '#FD8D3C' :
-           pop > 10000000  ? '#FEB24C' :
-           pop > 5000000   ? '#FFEDA0' :
-                             '#FED976';
+    return  pop > 200000000 ? '#800026' :
+            pop > 150000000 ? '#BD0026' :
+            pop > 100000000 ? '#E31A1C' :
+            pop > 50000000 ? '#FC4E2A' :
+            pop > 20000000 ? '#FD8D3C' :
+            pop > 10000000 ? '#FEB24C' :
+            pop > 5000000 ? '#FFEDA0' :
+                            '#FED976';
 }
 var populationLoaded = false;
 
@@ -290,15 +290,15 @@ const stateNameMapping = {
 function normalizeStateName(name) {
     if (!name) return '';
     let normalized = name.trim()
-                        .toLowerCase()
-                        .replace(/&/g, 'and')
-                        .replace(/\s+/g, ' ');
-    
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/\s+/g, ' ');
+
     // Check if there's a manual mapping
     if (stateNameMapping[normalized]) {
         normalized = stateNameMapping[normalized];
     }
-    
+
     return normalized;
 }
 
@@ -307,84 +307,84 @@ const populationData = {};
 
 /* Step 1: Load population data */
 fetch("/static/geojson/india_states_ut_population_leaflet.geojson")
-  .then(res => res.json())
-  .then(popData => {
-      
-      // Store population by normalized name
-      popData.features.forEach(f => {
-          const stateName = f.properties.name;
-          const normalizedName = normalizeStateName(stateName);
-          populationData[normalizedName] = {
-              population: f.properties.population_2024,
-              originalName: stateName
-          };
-      });
-      
+    .then(res => res.json())
+    .then(popData => {
 
-      /* Step 2: Load actual state boundaries and apply population colors */
-      fetch("/static/geojson/states_india.geojson")
-        .then(res => res.json())
-        .then(stateData => {
-            
-            // First pass: log all state names from boundary file
-            stateData.features.forEach(f => {
-                const props = f.properties;
-                const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
-            });
+        // Store population by normalized name
+        popData.features.forEach(f => {
+            const stateName = f.properties.name;
+            const normalizedName = normalizeStateName(stateName);
+            populationData[normalizedName] = {
+                population: f.properties.population_2024,
+                originalName: stateName
+            };
+        });
 
-            const populationLayer = L.geoJSON(stateData, {
-                style: function (feature) {
-                    
-                    const props = feature.properties;
+
+        /* Step 2: Load actual state boundaries and apply population colors */
+        fetch("/static/geojson/states_india.geojson")
+            .then(res => res.json())
+            .then(stateData => {
+
+                // First pass: log all state names from boundary file
+                stateData.features.forEach(f => {
+                    const props = f.properties;
                     const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
-                    const normalizedName = normalizeStateName(stateName);
-                    
-                    const popInfo = populationData[normalizedName];
-                    const pop = popInfo ? popInfo.population : 0;
-                    
+                });
 
-                    return {
-                        fillColor: getColor(pop),
-                        weight: 2,
-                        color: "white",
-                        fillOpacity: 0.7
-                    };
-                },
+                const populationLayer = L.geoJSON(stateData, {
+                    style: function (feature) {
 
-                onEachFeature: function (feature, layer) {
-                    
-                    const props = feature.properties;
-                    const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
-                    const normalizedName = normalizeStateName(stateName);
-                    
-                    const popInfo = populationData[normalizedName];
-                    const pop = popInfo ? popInfo.population : 0;
-                    const displayName = popInfo ? popInfo.originalName : (stateName || 'Unknown');
+                        const props = feature.properties;
+                        const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
+                        const normalizedName = normalizeStateName(stateName);
 
-                    layer.bindPopup(`
+                        const popInfo = populationData[normalizedName];
+                        const pop = popInfo ? popInfo.population : 0;
+
+
+                        return {
+                            fillColor: getColor(pop),
+                            weight: 2,
+                            color: "white",
+                            fillOpacity: 0.7
+                        };
+                    },
+
+                    onEachFeature: function (feature, layer) {
+
+                        const props = feature.properties;
+                        const stateName = props.state || props.name || props.NAME || props.st_nm || props.State;
+                        const normalizedName = normalizeStateName(stateName);
+
+                        const popInfo = populationData[normalizedName];
+                        const pop = popInfo ? popInfo.population : 0;
+                        const displayName = popInfo ? popInfo.originalName : (stateName || 'Unknown');
+
+                        layer.bindPopup(`
                         <b>${displayName}</b><br>
                         Population (2024): <b>${pop > 0 ? pop.toLocaleString() : 'Data not available'}</b>
                     `);
 
-                    layer.on({
-                        mouseover: function (e) {
-                            e.target.setStyle({
-                                weight: 3,
-                                color: "#000",
-                                fillOpacity: 0.9
-                            });
-                        },
-                        mouseout: function (e) {
-                            populationLayer.resetStyle(e.target);
-                        }
-                    });
-                }
-            });
-            populationLayerGroup.addLayer(populationLayer);
-            populationLoaded = true;
-            
-        })
-  })
+                        layer.on({
+                            mouseover: function (e) {
+                                e.target.setStyle({
+                                    weight: 3,
+                                    color: "#000",
+                                    fillOpacity: 0.9
+                                });
+                            },
+                            mouseout: function (e) {
+                                populationLayer.resetStyle(e.target);
+                            }
+                        });
+                    }
+                });
+                populationLayerGroup.addLayer(populationLayer);
+                populationLoaded = true;
+
+            })
+    })
 
 /* ================= CITY SEARCH FEATURE ================= */
 var searchMarker = null;
@@ -392,29 +392,29 @@ var searchMarker = null;
 function searchCity() {
     const searchInput = document.getElementById('citySearchInput');
     const searchTerm = searchInput.value.trim().toLowerCase();
-    
+
     if (!searchTerm) {
         alert("Please enter a city name to search");
         return;
     }
-        const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm + ', India')}&limit=1`;
-        
-        fetch(geocodeUrl)
+    const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm + ', India')}&limit=1`;
+
+    fetch(geocodeUrl)
         .then(res => res.json())
         .then(data => {
             if (data && data.length > 0) {
                 const result = data[0];
                 const lat = parseFloat(result.lat);
                 const lon = parseFloat(result.lon);
-                
+
                 // Remove previous search marker if exists
                 if (searchMarker) {
                     map.removeLayer(searchMarker);
                 }
-                
+
                 // Zoom to location
                 map.setView([lat, lon], 12);
-                
+
                 // Add marker
                 searchMarker = L.marker([lat, lon], {
                     icon: L.icon({
@@ -426,13 +426,13 @@ function searchCity() {
                         shadowSize: [41, 41]
                     })
                 }).addTo(map);
-                
+
                 searchMarker.bindPopup(`
                     <b>${result.display_name}</b><br>
                     Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}
                 `).openPopup();
 
-                
+
             } else {
                 alert(`City "${searchTerm}" not found. Please try another name.`);
             }
@@ -441,11 +441,11 @@ function searchCity() {
             console.error("Geocoding error:", err);
             alert("Error searching for city. Please try again.");
         });
-    }
+}
 function clearSearch() {
     const searchInput = document.getElementById('citySearchInput');
     searchInput.value = '';
-    
+
     if (searchMarker) {
         map.removeLayer(searchMarker);
         searchMarker = null;
@@ -463,9 +463,9 @@ var customMarkers = []; // Track all custom markers
 
 function tooglecustomMarker() {
     customMarkerMode = !customMarkerMode;
-    
+
     const btn = event.target;
-    
+
     if (customMarkerMode) {
         btn.classList.add("active");
         alert("Custom Marker Mode ON - Click anywhere on the map to add a marker");
@@ -478,5 +478,65 @@ function tooglecustomMarker() {
 function clearCustomMarkers() {
     customMarkers.forEach(marker => map.removeLayer(marker));
     customMarkers = [];
-    
+
 }
+
+// ================= CITY INFO FETCH ================= */
+
+function getCityInfo() {
+    const city = document.getElementById("City-info").value.trim();
+
+    if (!city) {
+        alert("Please enter a city name.");
+        return;
+    }
+
+    fetch("/api/gem", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ city_name: city })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        displayCityInfo(city, data);
+
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to fetch city info.");
+    });
+}
+
+function displayCityInfo(city, data) {
+
+    const content = `
+        <h3>${city}</h3>
+        <b>Tourist Attractions:</b><br>
+        ${data.tourist_attractions}<br><br>
+
+        <b>Local Cuisine:</b><br>
+        ${data.local_cuisine}<br><br>
+
+        <b>Cultural Significance:</b><br>
+        ${data.cultural_significance}<br><br>
+
+        <b>Best Time to Visit:</b><br>
+        ${data.best_time_to_visit}
+    `;
+
+    document.getElementById("cityInfoBox").innerHTML = content;
+}
+
+function clearCityInfo() {
+    document.getElementById("City-info").value = "";
+    document.getElementById("cityInfoBox").innerHTML = "";
+}
+
